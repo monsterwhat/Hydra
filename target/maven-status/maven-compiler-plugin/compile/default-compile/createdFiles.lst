@@ -1,6 +1,10 @@
 com\playdeca\threads\counters\Reader.class
 com\playdeca\threads\implementatios\Volatile.class
+com\playdeca\threads\app\mainFrame$3.class
 com\playdeca\threads\implementatios\Adder.class
+com\playdeca\threads\app\mainFrame$1.class
+com\playdeca\threads\app\mainFrame$4.class
+com\playdeca\threads\app\mainFrame.class
 com\playdeca\threads\counters\Executor$1.class
 com\playdeca\threads\implementatios\RWLock.class
 com\playdeca\threads\counters\Counter.class
@@ -9,5 +13,8 @@ com\playdeca\threads\implementatios\Synchronized.class
 com\playdeca\threads\counters\Executor.class
 com\playdeca\threads\implementatios\Atomic.class
 com\playdeca\threads\app\Main.class
+com\playdeca\threads\app\mainFrame$5.class
+com\playdeca\threads\app\mainFrame$6.class
 com\playdeca\threads\implementatios\Dirty.class
 com\playdeca\threads\counters\Writer.class
+com\playdeca\threads\app\mainFrame$2.class
