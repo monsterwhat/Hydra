@@ -37,6 +37,9 @@ public class Executor {
         ADDER //18s
     }
 
+    public Executor() {
+    }
+
     public void Execute(String type, int Threads, int Rounds, long TargetNumber) {
 
         switch (type.toUpperCase()) {
@@ -62,7 +65,6 @@ public class Executor {
                 System.out.println("Error en tipo de implementacion");
                 throw new AssertionError();
         }
-
 
         THREADS = Threads;
 
