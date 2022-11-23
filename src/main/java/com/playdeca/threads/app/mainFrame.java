@@ -4,8 +4,20 @@
  */
 package com.playdeca.threads.app;
 
-import com.playdeca.threads.counters.Executor;
-import java.util.HashSet;
+import com.playdeca.threads.counters.Counter;
+import com.playdeca.threads.counters.Reader;
+import com.playdeca.threads.counters.Writer;
+import com.playdeca.threads.implementatios.Adder;
+import com.playdeca.threads.implementatios.Atomic;
+import com.playdeca.threads.implementatios.Dirty;
+import com.playdeca.threads.implementatios.RWLock;
+import com.playdeca.threads.implementatios.Synchronized;
+import com.playdeca.threads.implementatios.Volatile;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 
 /**
  *
@@ -24,6 +36,8 @@ public class mainFrame extends javax.swing.JFrame {
         initComponents();
         cargarComboBox();
     }
+    
+    
     
     private void cargarComboBox() {
         cb_ListaTipos.addItem("DIRTY");
@@ -57,18 +71,22 @@ public class mainFrame extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtResultados = new javax.swing.JTextArea();
+        txtSeleccion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(401, 600));
+        setMinimumSize(new java.awt.Dimension(436, 480));
+        setPreferredSize(new java.awt.Dimension(436, 480));
         setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setSize(new java.awt.Dimension(436, 480));
+        getContentPane().setLayout(null);
 
         cb_ListaTipos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cb_ListaTiposActionPerformed(evt);
             }
         });
-        getContentPane().add(cb_ListaTipos, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 270, 40));
+        getContentPane().add(cb_ListaTipos);
+        cb_ListaTipos.setBounds(30, 20, 270, 40);
 
         btn_Start.setText("GO");
         btn_Start.addActionListener(new java.awt.event.ActionListener() {
@@ -76,7 +94,8 @@ public class mainFrame extends javax.swing.JFrame {
                 btn_StartActionPerformed(evt);
             }
         });
-        getContentPane().add(btn_Start, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, 50, 40));
+        getContentPane().add(btn_Start);
+        btn_Start.setBounds(320, 20, 70, 40);
 
         jSlider1.setMajorTickSpacing(10);
         jSlider1.setMinorTickSpacing(2);
@@ -87,7 +106,8 @@ public class mainFrame extends javax.swing.JFrame {
                 jSlider1StateChanged(evt);
             }
         });
-        getContentPane().add(jSlider1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 220, -1));
+        getContentPane().add(jSlider1);
+        jSlider1.setBounds(90, 80, 220, 28);
 
         jSlider2.setMajorTickSpacing(10);
         jSlider2.setMinorTickSpacing(2);
@@ -98,7 +118,8 @@ public class mainFrame extends javax.swing.JFrame {
                 jSlider2StateChanged(evt);
             }
         });
-        getContentPane().add(jSlider2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 220, -1));
+        getContentPane().add(jSlider2);
+        jSlider2.setBounds(90, 110, 220, 28);
 
         jSlider3.setMajorTickSpacing(1000000);
         jSlider3.setMaximum(10000000);
@@ -111,16 +132,20 @@ public class mainFrame extends javax.swing.JFrame {
                 jSlider3StateChanged(evt);
             }
         });
-        getContentPane().add(jSlider3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, 220, -1));
+        getContentPane().add(jSlider3);
+        jSlider3.setBounds(90, 140, 220, 28);
 
         lblThreads.setText("Threads");
-        getContentPane().add(lblThreads, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 50, -1));
+        getContentPane().add(lblThreads);
+        lblThreads.setBounds(30, 80, 50, 16);
 
         lblRounds.setText("Rounds");
-        getContentPane().add(lblRounds, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 50, -1));
+        getContentPane().add(lblRounds);
+        lblRounds.setBounds(30, 110, 50, 16);
 
         lblTarget.setText("Target");
-        getContentPane().add(lblTarget, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 50, -1));
+        getContentPane().add(lblTarget);
+        lblTarget.setBounds(30, 140, 50, 16);
 
         txtThreads.setText("10");
         txtThreads.addActionListener(new java.awt.event.ActionListener() {
@@ -128,7 +153,8 @@ public class mainFrame extends javax.swing.JFrame {
                 txtThreadsActionPerformed(evt);
             }
         });
-        getContentPane().add(txtThreads, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 70, -1));
+        getContentPane().add(txtThreads);
+        txtThreads.setBounds(320, 80, 70, 22);
 
         txtRounds.setText("10");
         txtRounds.addActionListener(new java.awt.event.ActionListener() {
@@ -136,7 +162,8 @@ public class mainFrame extends javax.swing.JFrame {
                 txtRoundsActionPerformed(evt);
             }
         });
-        getContentPane().add(txtRounds, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, 70, -1));
+        getContentPane().add(txtRounds);
+        txtRounds.setBounds(320, 110, 70, 22);
 
         txtTarget.setText("1000000");
         txtTarget.addActionListener(new java.awt.event.ActionListener() {
@@ -144,14 +171,27 @@ public class mainFrame extends javax.swing.JFrame {
                 txtTargetActionPerformed(evt);
             }
         });
-        getContentPane().add(txtTarget, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 70, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 400, 10));
+        getContentPane().add(txtTarget);
+        txtTarget.setBounds(320, 140, 70, 22);
+        getContentPane().add(jSeparator1);
+        jSeparator1.setBounds(0, 180, 420, 10);
 
         txtResultados.setColumns(20);
         txtResultados.setRows(5);
+        txtResultados.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtResultadosPropertyChange(evt);
+            }
+        });
         jScrollPane1.setViewportView(txtResultados);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 340, 160));
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(30, 250, 360, 160);
+
+        txtSeleccion.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        txtSeleccion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(txtSeleccion);
+        txtSeleccion.setBounds(30, 200, 360, 30);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -161,6 +201,7 @@ public class mainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cb_ListaTiposActionPerformed
 
     private void btn_StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_StartActionPerformed
+        txtResultados.setText("");
         String selectedItem = (String) this.cb_ListaTipos.getSelectedItem();
         Threads = Integer.parseInt(this.txtThreads.getText());
         Rounds = Integer.parseInt(this.txtRounds.getText());
@@ -212,12 +253,136 @@ public class mainFrame extends javax.swing.JFrame {
     private void jSlider3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider3StateChanged
         this.txtTarget.setText(String.valueOf(jSlider3.getValue()));
     }//GEN-LAST:event_jSlider3StateChanged
+
+    private void txtResultadosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtResultadosPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtResultadosPropertyChange
     
     public void Start(String selectedItem) {
-        Executor Test = new Executor();
-        
-        Test.Execute(selectedItem, Threads, Rounds, Target);
+        Execute(selectedItem, Threads, Rounds, Target);
     }
+    
+    public static long TARGET_NUMBER = 100000000l;
+    public static int THREADS = 10;
+    public static int ROUNDS = 10;
+    private static String COUNTER; //   Counters.RWLOCK.toString();
+
+    private static ExecutorService es;
+    private static int round;
+    private static long start;
+
+    private static Boolean[] rounds;
+
+    private static enum Counters {
+        DIRTY, //About 25s
+        VOLATILE, //Super Slow 2:40
+        SYNCHRONIZED, //42s
+        RWLOCK, //26s +/- 2s
+        ATOMIC, //50s
+        ADDER //18s
+    }
+    
+    public void Execute(String type, int Threads, int Rounds, long TargetNumber) {
+
+        switch (type.toUpperCase()) {
+            case "DIRTY":
+                COUNTER = Counters.DIRTY.toString();
+                break;
+            case "VOLATILE":
+                COUNTER = Counters.VOLATILE.toString();
+                break;
+            case "SYNCHRONIZED":
+                COUNTER = Counters.SYNCHRONIZED.toString();
+                break;
+            case "RWLOCK":
+                COUNTER = Counters.RWLOCK.toString();
+                break;
+            case "ATOMIC":
+                COUNTER = Counters.ATOMIC.toString();
+                break;
+            case "ADDER":
+                COUNTER = Counters.ADDER.toString();
+                break;
+            default:
+                System.out.println("Error en tipo de implementacion");
+                throw new AssertionError();
+        }
+
+        THREADS = Threads;
+
+        ROUNDS = Rounds;
+
+        TARGET_NUMBER = TargetNumber;
+
+        rounds = new Boolean[ROUNDS];
+
+        String Seleccion = ("Usando " + COUNTER 
+                         + ". threads: " + THREADS + "."
+                         + " rounds: " + ROUNDS
+                         + ". Target: " + TARGET_NUMBER);
+        
+        txtSeleccion.setText(Seleccion);
+        
+
+        for (round = 0; round < ROUNDS; round++) {
+            rounds[round] = Boolean.FALSE;
+
+            Counter counter = getCounter();
+
+            es = Executors.newFixedThreadPool(THREADS);
+
+            start = System.currentTimeMillis();
+
+            for (int j = 0; j < THREADS; j += 2) {
+                es.execute(new Reader(counter));
+                es.execute(new Writer(counter));
+            }
+
+            try {
+                es.awaitTermination(10, TimeUnit.MINUTES);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static Counter getCounter() {
+        Counters counterType = Counters.valueOf(COUNTER);
+
+        switch (counterType) {
+            case ADDER:
+                return new Adder();
+            case ATOMIC:
+                return new Atomic();
+            case DIRTY:
+                return new Dirty();
+            case RWLOCK:
+                return new RWLock();
+            case SYNCHRONIZED:
+                return new Synchronized();
+            case VOLATILE:
+                return new Volatile();
+        }
+        return null;
+    }
+    
+    
+    
+    public static void publish(long end) {
+        synchronized (rounds[round]) {
+            if (Objects.equals(rounds[round], Boolean.FALSE)) {
+                
+                String Tiempo;
+                Tiempo = " Tiempo: " + (end - start) + " ms";
+                txtResultados.append(Tiempo+'\n');
+                
+                rounds[round] = Boolean.TRUE;
+
+                es.shutdownNow();
+            }
+        }
+    }
+    
 
     /**
      * @param args the command line arguments
@@ -265,8 +430,9 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblRounds;
     private javax.swing.JLabel lblTarget;
     private javax.swing.JLabel lblThreads;
-    private javax.swing.JTextArea txtResultados;
+    public static javax.swing.JTextArea txtResultados;
     private javax.swing.JTextField txtRounds;
+    public static javax.swing.JLabel txtSeleccion;
     private javax.swing.JTextField txtTarget;
     private javax.swing.JTextField txtThreads;
     // End of variables declaration//GEN-END:variables
