@@ -74,7 +74,11 @@ public class mainFrame extends javax.swing.JFrame {
         txtSeleccion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Threads");
+        setAlwaysOnTop(true);
+        setLocation(new java.awt.Point(0, 0));
         setMinimumSize(new java.awt.Dimension(436, 480));
+        setName("Threads"); // NOI18N
         setPreferredSize(new java.awt.Dimension(436, 480));
         setResizable(false);
         setSize(new java.awt.Dimension(436, 480));

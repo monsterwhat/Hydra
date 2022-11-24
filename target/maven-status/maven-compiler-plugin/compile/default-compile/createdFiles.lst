@@ -16,6 +16,7 @@ com\playdeca\threads\implementatios\Atomic.class
 com\playdeca\threads\app\mainFrame$5.class
 com\playdeca\threads\app\mainFrame$6.class
 com\playdeca\threads\implementatios\Dirty.class
+com\playdeca\threads\app\mainFrame$11.class
 com\playdeca\threads\app\mainFrame$7.class
 com\playdeca\threads\counters\Writer.class
 com\playdeca\threads\app\mainFrame$2.class
