@@ -1,2 +1,2 @@
-# S.O.Threads
+# Operating Systems - Thread App.
  
