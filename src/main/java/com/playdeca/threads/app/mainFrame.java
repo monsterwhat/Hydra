@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.playdeca.threads.app;
 
 import com.playdeca.threads.counters.Counter;
@@ -18,11 +14,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-
 /**
- *
  * @author alvaro@playdeca.com
  */
+
 public class mainFrame extends javax.swing.JFrame {
 
     /**
@@ -35,6 +30,7 @@ public class mainFrame extends javax.swing.JFrame {
     public mainFrame() {
         initComponents();
         cargarComboBox();
+        this.setLocationRelativeTo(null);
     }
     
     
@@ -77,6 +73,7 @@ public class mainFrame extends javax.swing.JFrame {
         setTitle("Threads");
         setAlwaysOnTop(true);
         setLocation(new java.awt.Point(0, 0));
+        setMaximumSize(new java.awt.Dimension(436, 480));
         setMinimumSize(new java.awt.Dimension(436, 480));
         setName("Threads"); // NOI18N
         setPreferredSize(new java.awt.Dimension(436, 480));
@@ -102,6 +99,7 @@ public class mainFrame extends javax.swing.JFrame {
         btn_Start.setBounds(320, 20, 70, 40);
 
         jSlider1.setMajorTickSpacing(10);
+        jSlider1.setMinimum(2);
         jSlider1.setMinorTickSpacing(2);
         jSlider1.setPaintTicks(true);
         jSlider1.setValue(10);
@@ -114,6 +112,7 @@ public class mainFrame extends javax.swing.JFrame {
         jSlider1.setBounds(90, 80, 220, 28);
 
         jSlider2.setMajorTickSpacing(10);
+        jSlider2.setMinimum(1);
         jSlider2.setMinorTickSpacing(2);
         jSlider2.setPaintTicks(true);
         jSlider2.setValue(10);
